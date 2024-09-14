@@ -1,0 +1,147 @@
+
+% Enter the names of your group members below.
+% If you only have 2 group members, leave the last space blank
+%
+%%%%%
+%%%%% NAME: Duke Nguyen
+%%%%% NAME: Zehra Cengiz
+%%%%% NAME: Simon Aleksandrov
+%
+% Add your queries below. Please use the following format
+% 
+% %%%%% QUERY 2
+% % EXPLANATION: Checks if there is a block on blockA
+% on(X, blockA).
+%
+% where 2 is the number of the query. The EXPLANATION line should contain your explanation 
+% in English of what the query tests. Omit the "%" on the line with the query
+% Don't forget to end queries with a period.
+
+%%%%%% QUERY 1
+% EXPLANATION: Calculates amy's subtotal balance at cibc
+subtotal(amy, cibc, X).
+
+%%%%%% QUERY 2
+% EXPLANATION: Calculates john's subtotal balance at either cibc or bmo
+subtotal(john, Bank, X).
+
+%%%%%% QUERY 3
+% EXPLANATION: Calculates amy's subtotal balance at either cibc or bmo
+subtotal(amy, Bank, X).
+
+%%%%%% QUERY 4
+% EXPLANATION: Calculates the accrued interest for amy's account at either cibc or bmo
+accruedInterest(amy, Bank, X).
+
+%%%%%% QUERY 5
+% EXPLANATION: Calculates the accrued interest for either amy's or john's account at cibc
+accruedInterest(Name, cibc, X).
+
+%%%%%% QUERY 6
+% EXPLANATION: Calculates the accrued penalty for either amy's or john's account at bmo
+accruedPenalty(Name, bmo, X).
+
+%%%%%% QUERY 7
+% EXPLANATION: Calculates the accrued penalty for either amy's or john's account at either cibc or bmo
+accruedPenalty(Name, Bank, P).
+
+%%%%%% QUERY 8
+% EXPLANATION: Calculates the end of month balance for either amy's or john's account at cibc
+endOfMonthBalance(Name, cibc, X).
+
+%%%%%% QUERY 9
+% EXPLANATION: Calculates the end of month balance for john's account at bmo
+endOfMonthBalance(john, bmo, X).
+
+%%%%%% QUERY 10
+% EXPLANATION: Calculates the end of month balance for either amy's or john's account at ALL banks
+endOfMonthBalance(Name, X).
+
+%%%%%% YOU MAY CHOOSE TO ADD MORE THAN 10 QUERIES HERE
+%%%%%% HOWEVER, ONLY THE FIRST 10 WILL BE MARKED
+
+
+%%%%% INTERACTION
+%
+% Add your interaction below.
+%
+
+?- subtotal(amy, cibc, X).
+X = 1300
+Yes (0.00s cpu, solution 1, maybe more)
+No (0.00s cpu)
+?- subtotal(john, Bank, X).
+Bank = cibc
+X = 1100
+Yes (0.00s cpu, solution 1, maybe more)
+Bank = bmo
+X = 600
+Yes (0.00s cpu, solution 2)
+?- subtotal(amy, Bank, X).
+Bank = cibc
+X = 1300
+Yes (0.00s cpu, solution 1, maybe more)
+Bank = bmo
+X = 900
+Yes (0.02s cpu, solution 2)
+?- accruedInterest(amy, Bank, X).
+Bank = cibc
+X = 6.5
+Yes (0.00s cpu, solution 1, maybe more)
+Bank = bmo
+X = 0
+Yes (0.00s cpu, solution 2)
+?- accruedInterest(Name, cibc, X).
+Name = john
+X = 5.5
+Yes (0.00s cpu, solution 1, maybe more)
+Name = amy
+X = 6.5
+Yes (0.02s cpu, solution 2, maybe more)
+No (0.03s cpu)
+?- accruedPenalty(Name, bmo, X).
+Name = john
+X = 0
+Yes (0.00s cpu, solution 1, maybe more)
+Name = amy
+X = 0
+Yes (0.00s cpu, solution 2, maybe more)
+No (0.00s cpu)
+?- accruedPenalty(Name, Bank, P).
+Name = john
+Bank = cibc
+P = 0
+Yes (0.00s cpu, solution 1, maybe more)
+Name = john
+Bank = bmo
+P = 0
+Yes (0.02s cpu, solution 2, maybe more)
+Name = amy
+Bank = cibc
+P = 0
+Yes (0.02s cpu, solution 3, maybe more)
+Name = amy
+Bank = bmo
+P = 0
+Yes (0.02s cpu, solution 4, maybe more)
+No (0.02s cpu)
+?- endOfMonthBalance(Name, cibc, X).
+Name = john
+X = 1105.5
+Yes (0.00s cpu, solution 1, maybe more)
+Name = amy
+X = 1306.5
+Yes (0.00s cpu, solution 2, maybe more)
+No (0.00s cpu)
+?- endOfMonthBalance(john, bmo, X).
+X = 600
+Yes (0.00s cpu, solution 1, maybe more)
+No (0.00s cpu)
+?- endOfMonthBalance(Name, X).
+Name = john
+X = 1705.5
+Yes (0.00s cpu, solution 1, maybe more)
+Name = amy
+X = 2206.5
+Yes (0.00s cpu, solution 2, maybe more)
+No (0.00s cpu)
