@@ -60,7 +60,6 @@ created(Person, bmo, M, Y), not (not (not created(P1, bmo, M1, Y1), Y < Y1) , no
 
 %%%%%% QUERY 11: Who has the largest account created at CIBC in 2010 or later, of anyone who lives in Toronto?
 
-
 created(Person, cibc, M, Y), Y >= 2010, hasAccount(Person, cibc, Balance), lives(Person, toronto), not (created(P1, cibc, M1, Y1), Y1 >= 2010, hasAccount(P1, cibc, B1), lives(P1, toronto), Balance < B1).
 
 %%%%% INTERACTION
