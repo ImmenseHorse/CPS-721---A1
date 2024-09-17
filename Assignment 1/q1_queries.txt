@@ -1,0 +1,218 @@
+
+% Enter the names of your group members below.
+% If you only have 2 group members, leave the last space blank
+%
+%%%%%
+%%%%% NAME: Duke Nguyen
+%%%%% NAME: Zehra Cengiz
+%%%%% NAME: Simon Aleksandrov
+%
+% Add your answer queries below. Use the following format.
+% 
+% %%%%% QUERY 2: Retrieves the block that is on top of blockA
+% on(X, blockA).
+%
+% where 2 is the number of the query. Omit the "%" on the line with the query below.
+% Don't forget to end queries with a period.
+%
+% Each query below is labelled with an English description of what should be queried for.
+
+
+%%%%%% QUERY 1: Does Ada Lovelace live in San Francisco?
+
+lives(ada_lovelace, san_francisco).
+
+%%%%%% QUERY 2: What is the balance of Alan Turing's account with CIBC?
+
+hasAccount(alan_turing, cibc, Balance).
+
+%%%%%% QUERY 3: Does anyone have an account at both BMO and Scotiabank, and if so, who is it?
+
+hasAccount(Person, bmo, B1), hasAccount(Person, scotiabank, B2).
+
+%%%%%% QUERY 4: Is there a person with an account at Wells Fargo that does not live in New York?
+
+hasAccount(Person, wells_fargo, B), not lives(Person, new_york).
+
+%%%%%% QUERY 5: Does anyone who opened an account with CIBC in April 2018 have more than 5000 in their CIBC account?
+
+created(Person, cibc, 4, 2018) , hasAccount(Person, cibc, B), B > 5000.
+
+%%%%%% QUERY 6: Does any bank have more than one person who opened an account in January 2024?
+
+created(P1, Bank, 1, 2024), created(P2, Bank, 1, 2024), P1 ~= P2.
+
+%%%%%% QUERY 7: Did any person living outside of Winnipeg open more than one account in the same year?
+
+created(Person, B,M1, Y1), created(Person, B1,M2, Y1), not lives(Person, winnipeg), B ~= B1.
+
+%%%%%% QUERY 8: Is there a month in 2017 in which no one opened an account at the National Bank of Canada?
+
+month(Month), not created(P, national_bank, Month, 2017).
+
+%%%%%% QUERY 9: Did anyone open 3 different accounts in 3 consecutive years?
+
+created(P, B, M, Y), created(P, B1, M1, Y1), created(P, B2, M2, Y2), Y1 is Y + 1, Y2 is Y1 + 1.
+
+%%%%%% QUERY 10: Who opened the oldest account ever opened at BMO?
+ 
+created(Person, bmo, M, Y), not (not (not created(P1, bmo, M1, Y1), Y < Y1) , not (created(P1, bmo, M1, Y1), Y = Y1, M < M1)).
+
+%%%%%% QUERY 11: Who has the largest account created at CIBC in 2010 or later, of anyone who lives in Toronto?
+
+created(Person, cibc, M, Y), Y >= 2010, hasAccount(Person, cibc, Balance), lives(Person, toronto), not (created(P1, cibc, M1, Y1), Y1 >= 2010, hasAccount(P1, cibc, B1), lives(P1, toronto), Balance < B1).
+
+%%%%% INTERACTION
+%
+% Add your interaction below.
+% 
+
+[eclipse 2]: lives(ada_lovelace, san_francisco).
+
+Yes (0.00s cpu)
+[eclipse 3]: hasAccount(alan_turing, cibc, Balance).
+
+Balance = 18200
+Yes (0.00s cpu, solution 1, maybe more) ? ;
+
+No (0.00s cpu)
+[eclipse 4]: hasAccount(Person, bmo, B1), hasAccount(Person, scotiabank, B2).
+
+Person = kirk_douglas
+B1 = 9500
+B2 = 11000
+Yes (0.00s cpu, solution 1, maybe more) ? ;
+
+Person = harvey_specter
+B1 = 18000
+B2 = 20000
+Yes (0.00s cpu, solution 2, maybe more) ? ;
+
+No (0.00s cpu)
+[eclipse 5]:  hasAccount(Person, wells_fargo, B), not lives(Person, new_york).
+
+Person = ada_lovelace
+B = 19000
+Yes (0.00s cpu, solution 1, maybe more) ? ;
+
+No (0.00s cpu)
+[eclipse 6]:  created(Person, cibc, 4, 2018) , hasAccount(Person, cibc, B), B > 5000.
+
+Person = bet_cakmak
+B = 6800
+Yes (0.00s cpu, solution 1, maybe more) ? ;
+
+No (0.00s cpu)
+[eclipse 7]:  created(P1, Bank, 1, 2024), created(P2, Bank, 1, 2024), P1 ~= P2.
+
+P1 = alan_turing
+Bank = rbc
+P2 = rue_scott
+Yes (0.00s cpu, solution 1, maybe more) ? ;
+
+P1 = rue_scott
+Bank = rbc
+P2 = alan_turing
+Yes (0.00s cpu, solution 2, maybe more) ? ;
+
+No (0.00s cpu)
+[eclipse 8]:  created(Person, B,M1, Y1), created(Person, B1,M2, Y1), not lives(Person, winnipeg), B ~= B1.
+
+Person = julia_white
+B = bmo
+M1 = 7
+Y1 = 2011
+B1 = cibc
+M2 = 7
+Yes (0.00s cpu, solution 1, maybe more) ? ;
+
+Person = julia_white
+B = cibc
+M1 = 7
+Y1 = 2011
+B1 = bmo
+M2 = 7
+Yes (0.00s cpu, solution 2, maybe more) ? ;
+
+No (0.00s cpu)
+[eclipse 9]:  month(Mont), not created(P, national_bank, Month, 2017).
+
+No (0.00s cpu)
+[eclipse 10]:  month(Month), not created(P, national_bank, Month, 2017).
+
+Month = 1
+P = P
+Yes (0.00s cpu, solution 1, maybe more) ? ;
+
+Month = 7
+P = P
+Yes (0.00s cpu, solution 2, maybe more) ? ;
+
+Month = 8
+P = P
+Yes (0.00s cpu, solution 3, maybe more) ? ;
+
+Month = 9
+P = P
+Yes (0.00s cpu, solution 4, maybe more) ? ;
+
+Month = 10
+P = P
+Yes (0.00s cpu, solution 5, maybe more) ? ;
+
+Month = 11
+P = P
+Yes (0.00s cpu, solution 6, maybe more) ? ;
+
+Month = 12
+P = P
+Yes (0.00s cpu, solution 7)
+[eclipse 11]: created(P, B, M, Y), created(P, B1, M1, Y1), created(P, B2, M2, Y2), Y1 is Y + 1, Y2 is Y1 + 1.
+
+P = anne_dray
+B = td
+M = 2
+Y = 2015
+B1 = national_bank
+M1 = 8
+Y1 = 2016
+B2 = rbc
+M2 = 5
+Y2 = 2017
+Yes (0.00s cpu, solution 1, maybe more) ? ;
+
+P = anne_dray
+B = cibc
+M = 9
+Y = 2014
+B1 = td
+M1 = 2
+Y1 = 2015
+B2 = national_bank
+M2 = 8
+Y2 = 2016
+Yes (0.00s cpu, solution 2, maybe more) ? ;
+
+No (0.00s cpu)
+[eclipse 12]: created(Person, bmo, M, Y), not (not (not created(P1, bmo, M1, Y1), Y < Y1) , not (created(P1, bmo, M1, Y1), Y = Y1, M < M1)).
+
+Person = harvey_specter
+M = 6
+Y = 2001
+P1 = P1
+M1 = M1
+Y1 = Y1
+Yes (0.00s cpu, solution 1, maybe more) ? ;
+
+No (0.00s cpu)
+[eclipse 13]: created(Person, cibc, M, Y), Y >= 2010, hasAccount(Person, cibc, Balance), lives(Person, toronto), not (created(P1, cibc, M1, Y1), Y1 >= 2010, hasAccount(P1, cibc, B1), lives(P1, toronto), Balance < B1).
+
+Person = anne_dray
+M = 9
+Y = 2014
+Balance = 751651
+P1 = P1
+M1 = M1
+Y1 = Y1
+B1 = B1
+Yes (0.00s cpu)
