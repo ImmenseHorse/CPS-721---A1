@@ -77,12 +77,16 @@ canPass(R, r6, 2).
 
 ?- canPass(r1, r4, 3).
 Yes (0.00s cpu, solution 1, maybe more)
+Yes (0.00s cpu, solution 2, maybe more)
+No (0.00s cpu)
 ?- canPass(r1, r4, 1).
 No (0.00s cpu)
 ?- canPass(R, net, 1).
 No (0.00s cpu)
 ?- canScore(r1, 3).
 Yes (0.00s cpu, solution 1, maybe more)
+Yes (0.00s cpu, solution 2, maybe more)
+No (0.00s cpu)
 ?- canScore(R, 2).
 R = r3
 Yes (0.00s cpu, solution 1, maybe more)

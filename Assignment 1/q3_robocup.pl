@@ -40,13 +40,8 @@ pathClSym(R1, R2) :- robot(R1), robot(R2), not ((not pathClear(R1, R2)), (not pa
 canPass(R1, R2, M) :- 1 =< M, pathClSym(R1, R2).
 canPass(R1, R2, M) :- 2 =< M, pathClSym(R1, R), canPass(R, R2, M-1).
 
-
-ballPass(R1, R2, M) :- hasBall(R1), canPass(R1, R2, M).
-pathToNet(R, M) :- 1 =< M, pathClear(R, net).
-pathToNet(R, M) :- 2 =< M, pathClSym(R, X), pathToNet(X, M-1).
-
 canScore(R, M) :- 1 =< M, hasBall(R), pathClear(R, net).
-canScore(R, M) :- 2 =< M, hasBall(X), ballPass(X, R, M-1), pathClear(R, net).
+canScore(R, M) :- 2 =< M, hasBall(X), canPass(X, R, M-1), pathClear(R, net).
 
  
 
