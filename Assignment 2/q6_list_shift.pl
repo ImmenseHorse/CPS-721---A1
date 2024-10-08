@@ -44,7 +44,7 @@ myappend(next(Head, Tail1), List2, next(Head, Result)) :-
 
 % Helper predicate to calculate length of a list
 mylength(nil, 0).
-mylength(next(_, Tail), Len) :-
+mylength(next(X, Tail), Len) :-
     mylength(Tail, TailLen),
     Len is TailLen + 1.
 
