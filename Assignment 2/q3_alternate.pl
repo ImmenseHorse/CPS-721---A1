@@ -19,7 +19,7 @@ alternatePlusMinus([], 0).
 
 alternatePlusMinus([H|T], Sum) :- alternateTracker(T, plus, H, Sum).
 
-alternateTracker([], _, Sum, Sum).
+alternateTracker([], X, Sum, Sum).
 
 alternateTracker([H|T], plus, Acc, Sum) :- NewAcc is Acc + H, alternateTracker(T, minus, NewAcc, Sum).
 
