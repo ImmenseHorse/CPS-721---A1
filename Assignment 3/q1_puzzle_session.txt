@@ -1,0 +1,29 @@
+% Enter the names of your group members below.
+% If you only have 2 group members, leave the last space blank
+%
+%%%%%
+%%%%% NAME: Duke Nguyen
+%%%%% NAME: Zehra Cengiz
+%%%%% NAME: Simon Aleksandrov
+%
+% Add the required rules in the corresponding sections. 
+% If you put the rules in the wrong sections, you will lose marks.
+%
+% You may add additional comments as you choose but DO NOT MODIFY the comment lines below
+%
+
+%%%%% SECTION: puzzleGenerateAndTestSession
+%%%%% Put your session for generate and test below
+
+Start = 178.546
+End = 182.437
+Time = 3.8910000000000196
+Yes (3.89s cpu, solution 1, maybe more)
+
+%%%%% SECTION: puzzleInterleavingSession
+%%%%% Put your session for generate and test below
+
+Start = 182.718
+End = 182.718
+Time = 0.0
+Yes (0.00s cpu, solution 1, maybe more)
