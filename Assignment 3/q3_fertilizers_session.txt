@@ -1,0 +1,76 @@
+% Enter the names of your group members below.
+% If you only have 2 group members, leave the last space blank
+%
+%%%%%
+%%%%% NAME: Duke Nguyen
+%%%%% NAME: Zehra Cengiz
+%%%%% NAME: Simon Aleksandrov
+%
+% Add the required rules in the corresponding sections. 
+% If you put the rules in the wrong sections, you will lose marks.
+%
+% You may add additional comments as you choose but DO NOT MODIFY the comment lines below
+%
+
+%%%%% SECTION: fertilizersDescription
+%%%%% Put a brief description of your program below
+
+My program solves a constraint satisfaction problem (CSP) involving 5 plants, each fertilized
+with a different type of fertilizer. The goal is to determine which fertilizer was used for
+each plant, based on their heights, tomato yields, and weights, while satisfying all given constraints.
+To reduce the number of variables, I will define the fertilizers as variables with their domain set to the plant numbers.
+
+The constraints involve relational information about the plants, such as heights (distinct values),
+tomato yields, and weights, as well as specific conditions about the fertilizers (e.g., 
+"the tallest plant is fertilized with seaweed," "the heaviest plant is fertilized with egg-shells").
+The program employs interleaved constraint propagation, starting with height constraints (as they
+prune the search space the most), followed by yields, weights, and fertilizer assignments.
+
+The program uses myAllDiff predicate to ensure the uniqueness of heights, yields, weights,
+and fertilizer assignments across all plants (implicit constraints).
+
+%%%%% SECTION: fertilizersSession
+%%%%% Put your session for the network problem below
+
+Querying the program using solve(List) to verify the solution list of plants:
+?- solve([Bone_meal, Compost, Egg_shells, Manure, Seaweed, H1, T1, W1, H2, T2, W2, H3, T3, W3, H4, T4, W4, H5, T5, W5]).
+
+Bone_meal = 1
+Compost = 3
+Egg_shells = 4
+Manure = 5
+Seaweed = 2
+H1 = 2
+T1 = 12
+W1 = 3
+H2 = 7
+T2 = 4
+W2 = 9
+H3 = 1
+T3 = 9
+W3 = 10
+H4 = 5
+T4 = 6
+W4 = 19
+H5 = 4
+T5 = 21
+W5 = 14
+
+
+Querying the program using solve_and_print (no arguments) to display detailed information:
+?- solve_and_print.
+Yes
+
+Bone-meal is used to fertilize plant 1
+Compost is used to fertilize plant 3
+Egg-shells is used to fertilize plant 4
+Manure is used to fertilize plant 5
+Seaweed is used to fertilize plant 2
+
+Plant 1 is 2 feet tall, yields 12 tomatoes, weighing 3 pounds.
+Plant 2 is 7 feet tall, yields 4 tomatoes, weighing 9 pounds.
+Plant 3 is 1 feet tall, yields 9 tomatoes, weighing 10 pounds.
+Plant 4 is 5 feet tall, yields 6 tomatoes, weighing 19 pounds.
+Plant 5 is 4 feet tall, yields 21 tomatoes, weighing 14 pounds.
+
+Time taken: 0.11 seconds
