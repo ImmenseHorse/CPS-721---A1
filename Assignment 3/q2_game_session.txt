@@ -1,0 +1,42 @@
+% Enter the names of your group members below.
+% If you only have 2 group members, leave the last space blank
+%
+%%%%%
+%%%%% NAME: Duke Nguyen
+%%%%% NAME: Zehra Cengiz
+%%%%% NAME: Simon Aleksandrov
+%
+% Add the required rules in the corresponding sections. 
+% If you put the rules in the wrong sections, you will lose marks.
+%
+% You may add additional comments as you choose but DO NOT MODIFY the comment lines below
+%
+
+%%%%% SECTION: gameSession
+%%%%% Put your session for the game puzzle below
+
+?- solve_and_print.
+Yes (5.23s cpu, solution 1, maybe more)
+
+Output: q2_game.pl compiled 37464 bytes in 0.11 seconds
+Round: [[pickering, l, scarborough, w], [oakville, w, toronto, l]]
+Round: [[pickering, w, oakville, l], [toronto, w, richmond_hill, l]]
+Round: [[oakville, w, scarborough, l], [richmond_hill, w, pickering, l]]
+Round: [[pickering, d, toronto, d], [richmond_hill, d, scarborough, d]]
+Round: [[oakville, d, richmond_hill, d], [scarborough, d, toronto, d]]
+
+?- solve(Tournament).
+Tournament = [[[pickering, l, scarborough, w], [oakville, w, toronto, l]], [[pickering, w, oakville, l], [toronto, w, richmond_hill, l]], [[oakville, w, scarborough, l], [richmond_hill, w, pickering, l]], [[pickering, d, toronto, d], [richmond_hill, d, scarborough, d]], [[oakville, d, richmond_hill, d], [scarborough, d, toronto, d]]]
+Yes (3.25s cpu, solution 1, maybe more)
+
+?- time_solve.
+Yes (2.36s cpu, solution 1, maybe more)
+
+Output: Starting solve predicate...
+Solve predicate completed in 2.359 seconds.
+Solution found:
+Round: [[pickering, l, scarborough, w], [oakville, w, toronto, l]]
+Round: [[pickering, w, oakville, l], [toronto, w, richmond_hill, l]]
+Round: [[oakville, w, scarborough, l], [richmond_hill, w, pickering, l]]
+Round: [[pickering, d, toronto, d], [richmond_hill, d, scarborough, d]]
+Round: [[oakville, d, richmond_hill, d], [scarborough, d, toronto, d]]
