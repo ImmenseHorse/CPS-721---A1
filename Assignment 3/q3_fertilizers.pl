@@ -49,41 +49,32 @@ yields([4,6,9,12,21]).      % Possible yields (number of tomatoes)
 weights([3,9,10,14,19]).    % Possible weights in arbitrary units
 labels([1,2,3,4,5]).        % Labels for the plants (plant 1 to plant 5)
 
-% Custom implementation of member/2 to check if an element belongs to a list
-myMember(X, [X | Tail]).       % Base case: X is the head of the list
-myMember(X, [Y | T]) :-     % Recursive case: check the rest of the list (tail)
-    myMember(X, T).
+% Custom implementation to check if an element belongs to a list
+myMember(X, [X | Tail]).
+myMember(X, [Y | T]) :- myMember(X, T).
 
 % Ensure all elements of a list are distinct
-myAllDiff([]).                % Base case: An empty list has all distinct elements
-myAllDiff([H | T]) :-         % Recursive case: 
-    not myMember(H, T),     % H must not be a member of the tail
-    myAllDiff(T).             % Recursively check the rest of the list
+myAllDiff([]).
+myAllDiff([H | T]) :- not myMember(H, T), myAllDiff(T).
 
 % Helper predicates to validate if a given value belongs to heights, yields, or weights
-height(X) :- heights(H), myMember(X, H).    % X must be a valid height
-yield(X) :- yields(Y), myMember(X, Y).      % X must be a valid yield
-weight(X) :- weights(W), myMember(X, W).    % X must be a valid weight
+height(X) :- heights(H), myMember(X, H).
+yield(X) :- yields(Y), myMember(X, Y).
+weight(X) :- weights(W), myMember(X, W).
 
 % Plant predicate: a plant is identified by its label (N)
-% height (H), yield (T), and weight (W) are not guessed at this stage to reduce unnecessary backtracking
+% height (H), yield (T), and weight (W) are not guessed at this stage to avoid unnecessary backtracking
 plant(N, H, T, W) :- labels(L), myMember(N, L).
 
-% Find the tallest plant
-tallest(T) :- heights(H), maxList(H, T).    % Use maxList to get the maximum height
-% Find the shortest plant
-shortest(S) :- heights(H), minList(H, S).   % Use minList to get the minimum height
-% Find the plant with the most tomatoes
+tallest(T) :- heights(H), maxList(H, T).    	% Use maxList to get the maximum height
+shortest(S) :- heights(H), minList(H, S).   	% Use minList to get the minimum height
 mostTomatoes(M) :- yields(T), maxList(T, M).    % Use maxList to get the maximum yield
-% Find the plant with the fewest tomatoes
 fewestTomatoes(F) :- yields(T), minList(T, F).  % Use minList to get the minimum yield
-% Find the plant with the heaviest weight
-heaviest(H) :- weights(W), maxList(W, H).   % Use maxList to get the maximum weight
-% Find the plant with the lightest weight
-lightest(L) :- weights(W), minList(W, L).   % Use minList to get the minimum weight
+heaviest(H) :- weights(W), maxList(W, H).   	% Use maxList to get the maximum weight
+lightest(L) :- weights(W), minList(W, L).   	% Use minList to get the minimum weight
 
 
-% The constraint ordering in solve(List) is designed to improve efficiency by reducing unnecessary backtracking. 
+% The constraint ordering in solve(List) is designed to improve efficiency by reducing unnecessary backtracking.
 % The key points are as follows:
 %
 % 1. Height Constraints Applied First:
@@ -116,9 +107,9 @@ solve([Bone_meal, Compost, Egg_shells, Manure, Seaweed, H1, T1, W1, H2, T2, W2, 
     lightest(Lightest),
 
     % Ensure the shortest plant did not produce the most tomatoes
-    yield(TS),						  % TS stands for Tomatoes_Shortest
-    not TS = Most,                   % Ensure the yield of the shortest plant is not the maximum yield
-    plant(FS, Shortest, TS, WS),      % Assign the shortest plant with height Shortest, yield TS, and weight WS
+    yield(TS),				% TS stands for Tomatoes_Shortest
+    not TS = Most,                   	% Ensure the yield of the shortest plant is not the maximum yield
+    plant(FS, Shortest, TS, WS),      	% Assign the shortest plant with height Shortest, yield TS, and weight WS
 
     % Plant 1: Assign height, yield, and weight
     height(H1),
@@ -164,8 +155,8 @@ solve([Bone_meal, Compost, Egg_shells, Manure, Seaweed, H1, T1, W1, H2, T2, W2, 
     plant(Compost, HC, TC, WC),
 
     % Egg shells: The plant fertilized with egg shells produced half as many tomatoes as Plant 1 and the heaviest weight
-	yield(Egg_shells_Tomatoes),
-	T1 is Egg_shells_Tomatoes * 2,    % Egg-shell plant produced half as many tomatoes as Plant 1
+    yield(Egg_shells_Tomatoes),
+    T1 is Egg_shells_Tomatoes * 2,    % Egg-shell plant produced half as many tomatoes as Plant 1
     plant(Egg_shells, HES, Egg_shells_Tomatoes, Heaviest),
 
     % Manure: It is assigned to another plant, and it produced more weight than Plant 3
@@ -178,10 +169,10 @@ solve([Bone_meal, Compost, Egg_shells, Manure, Seaweed, H1, T1, W1, H2, T2, W2, 
     % Further yield and weight constraints
     weight(W1),                   % Weight of Plant 1
     weight(WS),                   % Weight of shortest plant
-    not WS = Heaviest,           % Ensure shortest plant does not have the heaviest weight
+    not WS = Heaviest,            % Ensure shortest plant does not have the heaviest weight
     weight(W3),                   % Weight of Plant 3
     weight(ManureWeight),         % Weight of the plant fertilized with manure
-    W3 < ManureWeight,            % Plant 3 weight is less than the Manure-fertilized plant's weight
+    W3 < ManureWeight,            % Plant 3 weight is less than the Manure-fertilized plant weight
     yield(T3),                    % Yield of Plant 3
 
     weight(W5),                   % Weight of Plant 5
@@ -214,11 +205,11 @@ solve_and_print :-
     TimeTaken is End - Start,
 
     % Output the results of the computation
-    write('Bone-meal is used to fertilize plant '), write(Bone_meal), nl,
-    write('Compost is used to fertilize plant '), write(Compost), nl,
-    write('Egg-shells is used to fertilize plant '), write(Egg_shells), nl,
-    write('Manure is used to fertilize plant '), write(Manure), nl,
-    write('Seaweed is used to fertilize plant '), write(Seaweed), nl, nl,
+    write('Bone-meal is used to fertilize plant '), write(Bone_meal), write('.'), nl,
+    write('Compost is used to fertilize plant '), write(Compost), write('.'), nl,
+    write('Egg-shells is used to fertilize plant '), write(Egg_shells), write('.'), nl,
+    write('Manure is used to fertilize plant '), write(Manure), write('.'), nl,
+    write('Seaweed is used to fertilize plant '), write(Seaweed), write('.'), nl, nl,
 
     write('Plant 1 is '), write(H1), write(' feet tall, yields '), write(T1), write(' tomatoes, weighing '), write(W1), write(' pounds.'), nl,
     write('Plant 2 is '), write(H2), write(' feet tall, yields '), write(T2), write(' tomatoes, weighing '), write(W2), write(' pounds.'), nl,
@@ -227,6 +218,5 @@ solve_and_print :-
     write('Plant 5 is '), write(H5), write(' feet tall, yields '), write(T5), write(' tomatoes, weighing '), write(W5), write(' pounds.'), nl, nl,
 
     % Output the CPU time taken
-	% Determine how much computer time the computation takes
-    write('Time taken: '), write(TimeTaken), write(' seconds'), nl.
-
+    % Determine how much computer time the computation takes
+    write('Time taken: '), write(TimeTaken), write(' seconds.'), nl.
