@@ -61,11 +61,11 @@ Querying the program using solve_and_print (no arguments) to display detailed in
 ?- solve_and_print.
 Yes
 
-Bone-meal is used to fertilize plant 1
-Compost is used to fertilize plant 3
-Egg-shells is used to fertilize plant 4
-Manure is used to fertilize plant 5
-Seaweed is used to fertilize plant 2
+Bone-meal is used to fertilize plant 1.
+Compost is used to fertilize plant 3.
+Egg-shells is used to fertilize plant 4.
+Manure is used to fertilize plant 5.
+Seaweed is used to fertilize plant 2.
 
 Plant 1 is 2 feet tall, yields 12 tomatoes, weighing 3 pounds.
 Plant 2 is 7 feet tall, yields 4 tomatoes, weighing 9 pounds.
@@ -73,4 +73,4 @@ Plant 3 is 1 feet tall, yields 9 tomatoes, weighing 10 pounds.
 Plant 4 is 5 feet tall, yields 6 tomatoes, weighing 19 pounds.
 Plant 5 is 4 feet tall, yields 21 tomatoes, weighing 14 pounds.
 
-Time taken: 0.11 seconds
+Time taken: 0.141 seconds.
