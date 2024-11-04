@@ -1,4 +1,3 @@
-
 % Enter the names of your group members below.
 % If you only have 2 group members, leave the last space blank
 %
@@ -110,7 +109,6 @@ gender(connor, man).
 %%%%% DO NOT INCLUDE ANY statements for account, created, lives, location and gender 
 %%%%%     in this section
 
-
 %%%%% helpers
 bank(X) :- account(_, _, X, _).
 person(X) :- lives(X, _).
@@ -119,13 +117,11 @@ woman(X) :- gender(X, woman).
 city(X) :- lives(_, X).
 country(X) :- location(_, X), not city(X).
 
-
 %%%%% article
 article(a).
 article(an).
 article(the).
 article(any).
-
 
 %%%%% common noun
 common_noun(bank, X) :- bank(X).
@@ -142,7 +138,6 @@ common_noun(american, X) :- adjective(american, X), person(X).
 common_noun(canadian, X) :- adjective(canadian, X), person(X).
 common_noun(british, X) :- adjective(british, X), person(X).
 
-
 %%%%% proper noun
 proper_noun(X) :- person(X).
 proper_noun(X) :- bank(X).
@@ -150,7 +145,6 @@ proper_noun(X) :- account(X,_,_,_).
 proper_noun(X) :- country(X).
 proper_noun(X) :- city(X).
 proper_noun(X) :- number(X).
-
 
 %%%%% adjectives
 adjective(canadian, City) :- location(City, canada).
@@ -188,9 +182,7 @@ adjective(new, A) :- created(A, _, _, _, 2024).
 adjective(recent, A) :- adjective(new, A).
 adjective(old, A) :- created(A, _, _, _, Y), Y < 2024.
 
-
 %%%%% Prepositions
-
 % 'of' as ownership or association
 preposition(of, Account, Owner) :- account(Account, Owner, _, _).  % Account belongs to Owner
 preposition(of, Balance, Owner) :- account(_, Owner, _, Balance).  % Balance associated with Owner
@@ -221,6 +213,7 @@ preposition(with, Account1, Account2) :-
     account(Account1, _, Bank, _),
     account(Account2, _, Bank, _),
     not Account1 = Account2.
+
 
 %%%%% SECTION: parser 10 10 10 10 / 11 11 11 11
 %%%%% For testing your lexicon for question 3, we will use the default parser initially given to you.
