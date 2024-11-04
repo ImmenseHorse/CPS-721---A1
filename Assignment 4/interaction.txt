@@ -1,0 +1,92 @@
+% Enter the names of your group members below.
+% If you only have 2 group members, leave the last space blank
+%
+%%%%%
+%%%%% NAME: Duke Nguyen
+%%%%% NAME: Zehra Cengiz
+%%%%% NAME: Simon Aleksandrov
+%
+% Add your interaction below.
+% 
+%%%%% INTERACTION
+
+(a) Is there an account in the Royal Bank of a man from Richmond Hill ?
+
+?- account(A, N, royal_bank_of_canada, M), gender(N, man), lives(N, richmondHill).
+A = 17
+N = john
+M = 13098
+Yes (0.00s cpu)
+
+(b) Is there a Canadian who has more than one account in CIBC?
+
+?- location(City, canada), lives(Name, City), account(ANum1, Name, cibc, B1), account(ANum2, Name, cibc, B2), not ANum1 = ANum2.
+City = richmondHill
+Name = philip
+ANum1 = 14
+B1 = 4050
+ANum2 = 18
+B2 = 1029
+Yes (0.00s cpu, solution 1, maybe more)
+City = richmondHill
+Name = philip
+ANum1 = 18
+B1 = 1029
+ANum2 = 14
+B2 = 4050
+Yes (0.00s cpu, solution 2, maybe more)
+No (0.00s cpu)
+
+(c) What are the banks in Toronto?
+
+?- location(Bank, toronto).
+Bank = royal_bank_of_canada
+Yes (0.00s cpu)
+
+(d) What is a balance of an account in the Bank of Montreal of a person from Scarborough?
+
+?- account(Anum, Name, bank_of_montreal, Balance), lives(Name, scarborough).
+Anum = 24
+Name = tom
+Balance = 100
+Yes (0.00s cpu)
+
+(e) What bank keeps accounts of at least two distinct local persons ?
+
+?- account(_90, Name1, Bank, _93), account(_111, Name2, Bank, _114), lives(Name1, City1), lives(Name2, City2), location(City1, canada), location(City2, canada), not Name1 = Name2.
+Name1 = robert
+Bank = royal_bank_of_canada
+Name2 = john
+City1 = scarborough
+City2 = richmondHill
+Yes (0.00s cpu, solution 1, maybe more)
+Name1 = marry
+Bank = bank_of_montreal
+Name2 = tom
+City1 = montreal
+City2 = scarborough
+Yes (0.02s cpu, solution 2, maybe more)
+Name1 = john
+Bank = royal_bank_of_canada
+Name2 = robert
+City1 = richmondHill
+City2 = scarborough
+Yes (0.02s cpu, solution 3, maybe more)
+Name1 = tom
+Bank = bank_of_montreal
+Name2 = marry
+City1 = scarborough
+City2 = montreal
+Yes (0.03s cpu, solution 4, maybe more)
+No (0.03s cpu)
+
+(f) What are the cities in the USA?
+
+?- location(City, usa).
+City = sanFrancisco
+Yes (0.00s cpu, solution 1, maybe more)
+City = texas
+Yes (0.00s cpu, solution 2, maybe more)
+City = chicago
+Yes (0.00s cpu, solution 3)
+
