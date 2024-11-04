@@ -190,29 +190,37 @@ adjective(old, A) :- created(A, _, _, _, Y), Y < 2024.
 
 
 %%%%% Prepositions
-preposition(of, X, Y) :- account(X, Y, _, _). 	% X is account of owner Y
-preposition(of, X, Y) :- account(Y, X, _, _).	% Y is account of owner X
-preposition(of, X, Y) :- account(_, Y, _, X).   % X is balance of owner Y
-preposition(of, X, Y) :- account(Y, _, _, X).   % X is balance of account Y
 
-preposition(from, X, Y) :- lives(X, Y).       	% X is person from city Y
-preposition(from, X, Y) :- lives(X, City), location(City, Y).	% X is person from country Y
+% 'of' as ownership or association
+preposition(of, Account, Owner) :- account(Account, Owner, _, _).  % Account belongs to Owner
+preposition(of, Balance, Owner) :- account(_, Owner, _, Balance).  % Balance associated with Owner
+preposition(of, Balance, Account) :- account(Account, _, _, Balance). % Balance of an Account
 
-preposition(in, X, Y) :- account(X, _, Y, _).   % X is account in bank Y
-preposition(in, X, Y) :- location(X, Y).       	% X is city/bank in country/city Y
-preposition(in, X, Y) :- location(X, City), location(City, Y).	% X is bank in country Y
+% 'from' as origin
+preposition(from, Person, City) :- lives(Person, City).          % Person is from City
+preposition(from, Person, Country) :- lives(Person, City), location(City, Country). % Person is from Country
 
-preposition(with, Bank, Account) :- account(Account, _, Bank, _).
-preposition(with, Person, Account) :- account(Account, Person, _, _).	% Person with Account (direct relationship)
+% 'in' as location
+preposition(in, Account, Bank) :- account(Account, _, Bank, _).  % Account is in a Bank
+preposition(in, City, Country) :- location(City, Country).       % City is in a Country
+preposition(in, Bank, City) :- location(Bank, City).             % Bank is located in a City
+preposition(in, Bank, Country) :- location(Bank, City), location(City, Country).  % Bank is in a Country
 
-% Account1 with Account2 (same bank)
-preposition(with, Account1, Account2) :- account(Account1, _, Bank, _), account(Account2, _, Bank, _), not Account1 = Account2.
+% 'with' as association
+preposition(with, Bank, Account) :- account(Account, _, Bank, _).   % Account associated with Bank
+preposition(with, Person, Account) :- account(Account, Person, _, _).   % Person owns Account
 
-preposition(with, Person, Account) :-	  % More than 1 account at the same bank
-    account(Account, Person, Bank, _),    % Person has Account
-    account(Account2, Person, Bank, _),   % Person also has Account2 at the same bank
+% A person with multiple accounts at the same bank, each with a different ID.
+preposition(with, Person, Account2) :-
+    account(Account1, Person, Bank, _),  % Person has Account1 at a Bank
+    account(Account2, Person, Bank, _),  % Person also has Account2 at the same Bank
+    not Account1 = Account2.             % Ensure the accounts have different IDs
+
+% Account1 and Account2 are in the same bank (owned by same or different people)
+preposition(with, Account1, Account2) :-
+    account(Account1, _, Bank, _),
+    account(Account2, _, Bank, _),
     not Account1 = Account2.
-
 
 %%%%% SECTION: parser 10 10 10 10 / 11 11 11 11
 %%%%% For testing your lexicon for question 3, we will use the default parser initially given to you.
