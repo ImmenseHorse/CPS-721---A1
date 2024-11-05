@@ -30,6 +30,7 @@ account(22, mia, western_bank, 12342).
 account(23, james, wellsFargo, 31313).
 account(24, tom, bank_of_montreal, 100).
 account(25, connor, rbc, 100).
+account(26, lebron, bank_of_montreal, 100).
 
 created(12, ann, metro_credit_union, 3, 2020).
 created(13, robert, rbc, 7, 1996).
@@ -45,6 +46,7 @@ created(22, mia, western_bank, 12, 2024).
 created(23, james, wellsFargo, 11, 1999).
 created(24, tom, bank_of_montreal, 3, 1997).
 created(25, connor, rbc, 4, 2024).
+created(26, lebron, bank_of_montreal, 12, 1984).
 
 lives(ann, markham).
 lives(robert, losAngeles).
@@ -57,8 +59,9 @@ lives(hector, edmonton).
 lives(emma, texas).
 lives(mia, vancouver).
 lives(james, chicago).
-lives(tom, sanFrancisco).
+lives(tom, scarborough).
 lives(connor, london).
+lives(lebron, losAngeles).
 
 location(scarborough, canada). 
 location(markham, canada).
@@ -98,7 +101,7 @@ gender(mia, woman).
 gender(james, man).
 gender(tom, man).
 gender(connor, man).
-
+gender(lebron, man).
 
 %%%%% SECTION: lexicon
 %%%%% Put the rules/statements defining articles, adjectives, proper nouns, common nouns,
