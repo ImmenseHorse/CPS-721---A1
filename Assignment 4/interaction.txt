@@ -12,7 +12,7 @@
 
 
 (a) Is there an account in the Royal Bank of a man from Richmond Hill?
-?- account(Account, Owner, rbc, _102), gender(Owner, man), lives(Owner, richmondHill).
+?- account(Account, Owner, rbc, _), gender(Owner, man), lives(Owner, richmondHill).
 Account = 17
 Owner = john
 Yes (0.00s cpu, solution 1, maybe more)
@@ -20,7 +20,7 @@ No (0.02s cpu)
 
 
 (b) Is there a Canadian who has more than one account in CIBC?
-?- account(Account1, Owner, cibc, _105), account(Account2, Owner, cibc, _126), not Account1 = Account2, lives(Owner, City), location(City, canada).
+?- account(Account1, Owner, cibc, _), account(Account2, Owner, cibc, _), not Account1 = Account2, lives(Owner, City), location(City, canada).
 Account1 = 14
 Owner = philip
 Account2 = 18
