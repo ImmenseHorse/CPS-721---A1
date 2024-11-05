@@ -1,4 +1,3 @@
-
 % Enter the names of your group members below.
 % If you only have 2 group members, leave the last space blank
 %
@@ -41,7 +40,7 @@ created(16, linda, bank_of_america, 4, 1993).
 created(17, john, rbc, 1, 2023).
 created(19, george, scotiabank, 6, 1990).
 created(20, hector, hsbc, 9, 2004).
-created(21,emma, citibank, 10, 2002).
+created(21, emma, citibank, 10, 2002).
 created(22, mia, western_bank, 12, 2024).
 created(23, james, wellsFargo, 11, 1999).
 created(24, tom, bank_of_montreal, 3, 1997).
@@ -58,7 +57,7 @@ lives(hector, edmonton).
 lives(emma, texas).
 lives(mia, vancouver).
 lives(james, chicago).
-lives(tom, scarborough).
+lives(tom, sanFrancisco).
 lives(connor, london).
 
 location(scarborough, canada). 
@@ -100,6 +99,7 @@ gender(james, man).
 gender(tom, man).
 gender(connor, man).
 
+
 %%%%% SECTION: lexicon
 %%%%% Put the rules/statements defining articles, adjectives, proper nouns, common nouns,
 %%%%% and prepositions in this section.
@@ -112,8 +112,7 @@ gender(connor, man).
 
 %%%%% helpers
 bank(X) :- account(_, _, X, _).
-person(P) :- gender(P, man).
-person(P) :- gender(P, woman).
+person(X) :- account(_, X, _, _).
 man(X) :- gender(X, man).
 woman(X) :- gender(X, woman).
 city(X) :- lives(_, X).
@@ -159,11 +158,11 @@ adjective(british, Bank) :-  location(Bank, City), location(City, united_kingdom
 
 adjective(canadian, Person) :-  lives(Person, City), location(City, canada). 
 adjective(american, Person) :-  lives(Person, City), location(City, usa). 
-adjective(british, Person) :-  lives(Person, City), location(City, united_kingdom).
+adjective(british, Person) :-  lives(Person, City), location(City, united_kingdom). 
 
-adjective(canadian, Account) :- account(Account, _, Bank, _), adjective(canadian, Bank).
+adjective(canadian, Account) :- account(Account, _, Bank, _), adjective(canadian, Bank ).
 adjective(american, Account) :- account(Account, _, Bank, _), adjective(american, Bank).
-adjective(british, Account) :- account(Account, _, Bank, _), adjective(british, Bank).
+adjective(british, Account) :-  account(Account, _, Bank, _), adjective(british, Bank).
 
 adjective(local, X) :-  adjective(canadian, X).
 adjective(foreign, X) :- adjective(american, X).
@@ -184,17 +183,18 @@ adjective(new, A) :- account(A, _, _, _), created(A, _, _, _, 2024).
 adjective(recent, A) :- adjective(new, A).
 adjective(old, A) :- account(A, _, _, _), created(A, _, _, _, Y), Y < 2024.
 
+
 %%%%% Prepositions
 preposition(of, X, Y) :- account(X, Y, _, _).    % X is account of owner Y
-preposition(of, Owner, Account) :- account(Account, Owner, _, _).
 preposition(of, X, Y) :- account(_, Y, _, X).    % X is balance of owner Y
 preposition(of, X, Y) :- account(Y, _, _, X).    % X is balance of account Y
+preposition(of, Owner, Account) :- account(Account, Owner, _, _).
 
 preposition(from, X, Y) :- lives(X, Y).        % X is person from city Y
 preposition(from, X, Y) :- lives(X, City), location(City, Y).
 
 preposition(in, X, Y) :- account(X, _, Y, _).    % X is account in bank Y
-preposition(in, X, Y) :- location(X, Y).       % X is city/bank in country/city Y
+preposition(in, X, Y) :- location(X, Y).         % X is city/bank in country/city Y
 preposition(in, X, Y) :- location(X, City), location(City, Y).
 
 preposition(with, Bank, Account) :- account(Account, _, Bank, _).
