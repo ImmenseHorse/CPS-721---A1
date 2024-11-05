@@ -1,3 +1,4 @@
+
 % Enter the names of your group members below.
 % If you only have 2 group members, leave the last space blank
 %
@@ -16,8 +17,8 @@
 %%%%% SECTION: database
 %%%%% Put statements for account, created, lives, location and gender below
 
-account(12,ann,metro_credit_union,4505).
-account(13,robert,rbc,750).
+account(12, ann, metro_credit_union, 4505).
+account(13, robert, rbc, 750).
 account(14, philip, cibc, 4050).
 account(18, philip, cibc, 1029).
 account(15, marry, bank_of_montreal, 10900).
@@ -74,7 +75,7 @@ location(london, united_kingdom).
 location(toronto, canada).
 location(losAngeles, usa).
 
-location(rbc,toronto).
+location(rbc, toronto).
 location(metro_credit_union, scarborough).
 location(cibc, markham).
 location(bank_of_montreal, montreal).
@@ -111,7 +112,8 @@ gender(connor, man).
 
 %%%%% helpers
 bank(X) :- account(_, _, X, _).
-person(X) :- lives(X, _).
+person(P) :- gender(P, man).
+person(P) :- gender(P, woman).
 man(X) :- gender(X, man).
 woman(X) :- gender(X, woman).
 city(X) :- lives(_, X).
@@ -163,7 +165,7 @@ adjective(canadian, Account) :- account(Account, _, Bank, _), adjective(canadian
 adjective(american, Account) :- account(Account, _, Bank, _), adjective(american, Bank).
 adjective(british, Account) :- account(Account, _, Bank, _), adjective(british, Bank).
 
-adjective(local, X) :- adjective(canadian, X).
+adjective(local, X) :-  adjective(canadian, X).
 adjective(foreign, X) :- adjective(american, X).
 adjective(foreign, X) :- adjective(british, X).
 
@@ -178,41 +180,34 @@ adjective(small, B) :- number(B), B < 1000.
 adjective(large, B) :- number(B), B > 10000.
 adjective(medium, B) :- number(B), B >= 1000, B =< 10000.
 
-adjective(new, A) :- created(A, _, _, _, 2024).
+adjective(new, A) :- account(A, _, _, _), created(A, _, _, _, 2024).
 adjective(recent, A) :- adjective(new, A).
-adjective(old, A) :- created(A, _, _, _, Y), Y < 2024.
+adjective(old, A) :- account(A, _, _, _), created(A, _, _, _, Y), Y < 2024.
 
 %%%%% Prepositions
-% 'of' as ownership or association
-preposition(of, Account, Owner) :- account(Account, Owner, _, _).  % Account belongs to Owner
-preposition(of, Balance, Owner) :- account(_, Owner, _, Balance).  % Balance associated with Owner
-preposition(of, Balance, Account) :- account(Account, _, _, Balance). % Balance of an Account
+preposition(of, X, Y) :- account(X, Y, _, _).    % X is account of owner Y
+preposition(of, Owner, Account) :- account(Account, Owner, _, _).
+preposition(of, X, Y) :- account(_, Y, _, X).    % X is balance of owner Y
+preposition(of, X, Y) :- account(Y, _, _, X).    % X is balance of account Y
 
-% 'from' as origin
-preposition(from, Person, City) :- lives(Person, City).          % Person is from City
-preposition(from, Person, Country) :- lives(Person, City), location(City, Country). % Person is from Country
+preposition(from, X, Y) :- lives(X, Y).        % X is person from city Y
+preposition(from, X, Y) :- lives(X, City), location(City, Y).
 
-% 'in' as location
-preposition(in, Account, Bank) :- account(Account, _, Bank, _).  % Account is in a Bank
-preposition(in, City, Country) :- location(City, Country).       % City is in a Country
-preposition(in, Bank, City) :- location(Bank, City).             % Bank is located in a City
-preposition(in, Bank, Country) :- location(Bank, City), location(City, Country).  % Bank is in a Country
+preposition(in, X, Y) :- account(X, _, Y, _).    % X is account in bank Y
+preposition(in, X, Y) :- location(X, Y).       % X is city/bank in country/city Y
+preposition(in, X, Y) :- location(X, City), location(City, Y).
 
-% 'with' as association
-preposition(with, Bank, Account) :- account(Account, _, Bank, _).   % Account associated with Bank
-preposition(with, Person, Account) :- account(Account, Person, _, _).   % Person owns Account
-
-% A person with multiple accounts at the same bank, each with a different ID.
-preposition(with, Person, Account2) :-
-    account(Account1, Person, Bank, _),  % Person has Account1 at a Bank
-    account(Account2, Person, Bank, _),  % Person also has Account2 at the same Bank
-    not Account1 = Account2.             % Ensure the accounts have different IDs
-
-% Account1 and Account2 are in the same bank (owned by same or different people)
-preposition(with, Account1, Account2) :-
+preposition(with, Bank, Account) :- account(Account, _, Bank, _).
+preposition(with, Person, Account) :-          % Person with Account (direct relationship)
+    account(Account, Person, _, _).
+preposition(with, Account1, Account2) :-       % Account1 with Account2 (same bank)
     account(Account1, _, Bank, _),
     account(Account2, _, Bank, _),
     not Account1 = Account2.
+preposition(with, Person, Account2) :-         % Person with Account2 (shared bank)
+    account(Account1, Person, Bank, _),        % Person has Account1
+    account(Account2, _, Bank, _),             % Account2 is in same bank
+    not Account1 = Account2. 
 
 
 %%%%% SECTION: parser 10 10 10 10 / 11 11 11 11
