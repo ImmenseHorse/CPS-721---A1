@@ -1,0 +1,66 @@
+% Enter the names of your group members below.
+% If you only have 2 group members, leave the last space blank
+%
+%%%%%
+%%%%% NAME: Duke Nguyen
+%%%%% NAME: Zehra Cengiz
+%%%%% NAME: Simon Aleksandrov
+%
+% Add your test queries below, along with a description of the test you are performing.
+% The format can look as follows
+% 
+% %%%%% QUERY 2
+% %% Description: Checks whether a british woman has a small account in a local bank
+% what([a, british, woman, with, a small, account, in, a, canadian, bank], A).
+%
+
+%%%%%% QUERY 1
+%% Description: Checks whether a canadian has a large account in a bank
+what([any, canadian, with, a, large, account, in, a, bank], X).
+
+
+%%%%%% QUERY 2
+%% Description: Finds all the foreign cities
+what([a,foreign, city],X).
+
+
+%%%%%% QUERY 3
+%% Description: Checks whether an american has a small account in a foreign account
+what([an, american, with, a, small, foreign, account], X).
+
+
+%%%%%% QUERY 4
+%% Description: Finds a foreign bank that has a medium account
+what([a, foreign, bank, with, a, medium, account],X).
+
+
+%%%%%% QUERY 5
+%% Description: Finds a balance with a medium amount in a foreign account
+what([a, balance, of, a, medium, foreign, account],X).
+
+
+%%%%%% QUERY 6
+%% Description: Finds a canadian bank that has american man an account registered with it
+what([a, canadian, bank, with, an, american, man], X).
+
+
+%%%%%% QUERY 7
+%% Description: finds an account balance of a foreign person in a canadian bank
+what([a, balance, of, a, foreign, person, with, an, account,in, a, canadian, bank],X).
+
+
+%%%%%% QUERY 8
+%% Description: Finds a man in canada that has a local account from before 2024 with a medium balance.
+what([a, local, man, with,an, old, local, medium, account],X).
+
+
+%%%%%% QUERY 9
+%% Description: Finds a canadian woman that recently opened her account and has a large account balance in a canadian bank
+what([a, canadian, woman, with, a, recent, account, of, a,large, account, in, a, canadian, bank],X)
+
+
+%%%%%% QUERY 10
+%% Description: Finds an newly opened account with 10,000> account balance in a canadian bank
+what([a, new, large, account, in, a, local, bank],X).
+
+

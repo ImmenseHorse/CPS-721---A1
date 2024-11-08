@@ -118,7 +118,7 @@ bank(X) :- account(_, _, X, _).
 person(X) :- account(_, X, _, _).
 man(X) :- gender(X, man).
 woman(X) :- gender(X, woman).
-city(X) :- lives(_, X).
+city(X) :- location(X, _), not account(_, _, X, _).
 country(X) :- location(_, X), not city(X).
 
 %%%%% article
@@ -178,10 +178,6 @@ adjective(small, A) :- account(A, _, _, Balance), Balance < 1000.
 adjective(large, A) :- account(A, _, _, Balance), Balance > 10000.
 adjective(medium, A) :- account(A, _, _, Balance), Balance >= 1000, Balance =< 10000.
 
-adjective(small, B) :- number(B), B < 1000.
-adjective(large, B) :- number(B), B > 10000.
-adjective(medium, B) :- number(B), B >= 1000, B =< 10000.
-
 adjective(new, A) :- account(A, _, _, _), created(A, _, _, _, 2024).
 adjective(recent, A) :- adjective(new, A).
 adjective(old, A) :- account(A, _, _, _), created(A, _, _, _, Y), Y < 2024.
@@ -201,16 +197,19 @@ preposition(in, X, Y) :- location(X, Y).         % X is city/bank in country/cit
 preposition(in, X, Y) :- location(X, City), location(City, Y).
 
 preposition(with, Bank, Account) :- account(Account, _, Bank, _).
+preposition(with, Bank, Person) :- account(_, Person, Bank, _).
+preposition(with, Person, Bank) :- account(_, Person, Bank, _).
 preposition(with, Person, Account) :-          % Person with Account (direct relationship)
     account(Account, Person, _, _).
+
 preposition(with, Account1, Account2) :-       % Account1 with Account2 (same bank)
     account(Account1, _, Bank, _),
     account(Account2, _, Bank, _),
     not Account1 = Account2.
-preposition(with, Person, Account2) :-         % Person with Account2 (shared bank)
-    account(Account1, Person, Bank, _),        % Person has Account1
-    account(Account2, _, Bank, _),             % Account2 is in same bank
-    not Account1 = Account2. 
+%preposition(with, Person, Account2) :-         % Person with Account2 (shared bank)
+ %   account(Account1, Person, Bank, _),        % Person has Account1
+ %   account(Account2, _, Bank, _),             % Account2 is in same bank
+ %   not Account1 = Account2. 
 
 
 %%%%% SECTION: parser 10 10 10 10 / 11 11 11 11
@@ -227,14 +226,17 @@ what(Words, Ref) :- np(Words, Ref).
 /* Noun phrase can be a proper name or can start with an article */
 
 np([Name],Name) :- proper_noun(Name).
-np([Art|Rest], What) :- article(Art), np2(Rest, What).
+np([the|Rest], What) :- article(the), np2(Rest, What), not (np2(Rest, What2), not What = What2).
+np([Art|Rest], What) :- not Art = the, article(Art), np2(Rest, What).
 
 
 /* If a noun phrase starts with an article, then it must be followed
    by another noun phrase that starts either with an adjective
    or with a common noun. */
 
-np2([Adj|Rest],What) :- adjective(Adj,What), np2(Rest, What).
+np2([largest|Rest],What) :- np2(Rest, What), not (np2(Rest,What2), not What = What2, account(What, _, _,B), account(What2, _, _,B2),  not B > B2).
+np2([oldest|Rest],What) :- np2(Rest, What), not (np2(Rest,What2), not What = What2, created(What, _, _,M,B), created(What2, _, _,M2,B2), not (not B2 < B, not (B2 = B,  M2 < M))).
+np2([Adj|Rest],What) :- not Adj = largest, not Adj = oldest, adjective(Adj,What), np2(Rest, What).
 np2([Noun|Rest], What) :- common_noun(Noun, What), mods(Rest,What).
 
 /* Modifier(s) provide an additional specific info about nouns.
@@ -246,9 +248,17 @@ mods(Words, What) :-
 	appendLists(Start, End, Words),
 	prepPhrase(Start, What),	mods(End, What).
 
+betweenHelper([L, and, U|Rest], L, U, Rest) :- number(L), number(U).
+between(What, B) :- account(What, _,_,B).
+between(What, B) :- account(_, What,_,B).
+between(What, B) :- account(_, _,What,B).
+between(What, What) :- account(_, _,_,What).
+
 prepPhrase([Prep | Rest], What) :-
 	preposition(Prep, What, Ref), np(Rest, Ref).
+prepPhrase([between | Rest], What) :- betweenHelper(Rest, L, U, NewRest), between(What, B), NewRest = [], L =< B, B =< U.
+prepPhrase([between | Rest], What) :- betweenHelper(Rest, L, U, NewRest), between(What, B),L =< B, B =< U, np(NewRest, What).
+
 
 appendLists([], L, L).
 appendLists([H | L1], L2, [H | L3]) :-  appendLists(L1, L2, L3).
-
