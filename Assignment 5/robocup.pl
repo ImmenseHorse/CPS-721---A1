@@ -61,11 +61,12 @@ goal_state(22, S) :- robotLoc(r1, 2, 4, S).
 
 % Preconditions for move(Robot, Row1, Col1, Row2, Col2)
 poss(move(Robot, Row1, Col1, Row2, Col2), S) :-
-    robot(Robot),
+    robot(Robot), % Robot is valid
     robotLoc(Robot, Row1, Col1, S), % Robot starts at (Row1, Col1)
     valid_adjacent(Row1, Col1, Row2, Col2), % Move is adjacent
     within_bounds(Row2, Col2), % Destination is within bounds
-    no_robot_or_opponent(Row2, Col2, S). % Destination is unoccupied
+    not(opponentAt(Row2, Col2)), % Destination is not occupied by an opponent
+    not(robotLoc(_, Row2, Col2, S)). % Destination is not occupied by any robot
 
 % Preconditions for pass(Robot1, Robot2)
 poss(pass(Robot1, Robot2), S) :-
@@ -106,11 +107,6 @@ within_bounds(Row, Col) :-
     numRows(MaxRows), numCols(MaxCols),
     Row >= 0, Row < MaxRows,
     Col >= 0, Col < MaxCols.
-
-% Ensure the destination cell is unoccupied.
-no_robot_or_opponent(Row, Col, S) :-
-    not opponentAt(Row, Col), % No opponent
-    not robotLoc(_, Row, Col, S). % No robot
 
 % Ensure the pass is along a straight line (horizontal or vertical).
 aligned(Row1, _, Row2, _) :- Row1 = Row2.
