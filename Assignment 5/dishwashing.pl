@@ -79,6 +79,10 @@ item(X) :- glassware(X).
 item(X) :- plate(X).
 item(X) :- scrubber(X).
 
+% Helper predicates
+correct_scrubber(X, brush) :- glassware(X).
+correct_scrubber(X, sponge) :- plate(X).
+
 %%%%% SECTION: precondition_axioms_dishwashing
 %%%%% Write precondition axioms for all actions in your domain. Recall that to avoid
 %%%%% potential problems with negation in Prolog, you should not start bodies of your
@@ -88,50 +92,62 @@ item(X) :- scrubber(X).
 
 % Preconditions for picking up item X from place P
 poss(pickUp(X, P), S) :-
-    item(X), place(P), % X is a valid item, and P is a valid place
-    loc(X, P, S), % X is located at P
-    numHolding(Count, S), Count < 2. % Robot is holding fewer than 2 items
+    item(X),
+    place(P),
+    loc(X, P, S),        % X must be at P
+    not holding(X, S),    % Not already holding X
+    numHolding(N, S),
+    N < 2.
 
-% Preconditions for putting down item X to place P
+% Preconditions for putting down item X at place P
 poss(putDown(X, P), S) :-
-    item(X), place(P), % X is a valid item, and P is a valid place
-    holding(X, S). % Robot is holding X
+    item(X),               % X is a valid item
+    place(P),              % P is a valid place
+    holding(X, S).
 
 % Preconditions for turning on the faucet
-poss(turnOnFaucet, S) :-
-    numHolding(Count, S), Count =< 1, % Robot has at most 1 item in hand
-    not faucetOn(S). % Faucet is off
+poss(turnOnFaucet, S) :- 
+    not faucetOn(S),
+    numHolding(N, S),
+    N < 2.
 
 % Preconditions for turning off the faucet
-poss(turnOffFaucet, S) :-
-    faucetOn(S), % Faucet is on
-    numHolding(Count, S), Count =< 1. % Robot has at most 1 item in hand
+ poss(turnOffFaucet, S) :- 
+    faucetOn(S),
+    numHolding(N, S),
+    N < 2.
 
 % Preconditions for adding soap to scrubber X
 poss(addSoap(X), S) :-
-    scrubber(X), % X is a scrubber
-    holding(X, S), % Robot is holding X
-    numHolding(Count, S), Count =< 1. % Robot has at most 1 other item in hand
+    scrubber(X),       % X must be a scrubber
+    not soapy(X, S),    % Scrubber isnt already soapy
+    holding(X, S),     % Must be holding the scrubber
+    numHolding(Count, S),
+    Count =< 1.        % Must have a free hand
 
-
-% Note: Scrubbing a dish with a scrubber that has no soap on it will have no effect on the dish,
-% but the action can still be applied.
-% Preconditions for scrubbing a dish X with scrubber Y
+% Preconditions for scrubbing dish X with scrubber Y
 poss(scrub(X, Y), S) :-
-    dish(X), scrubber(Y), % X is a dish, and Y is a scrubber
-    holding(X, S), holding(Y, S), % Robot is holding both X and Y
-    correct_scrubber(X, Y). % Correct scrubber for the dish type
+    dish(X),           % X must be a dish
+    scrubber(Y),       % Y must be a scrubber
+    dirty(X, S),
+    holding(X, S),     % Must be holding both items
+    holding(Y, S),
+    soapy(Y, S),
+    correct_scrubber(X, Y).
 
-% Helper for scrubber compatibility
-correct_scrubber(X, brush) :- glassware(X). % Glassware requires a brush
-correct_scrubber(X, sponge) :- plate(X). % Plates require a sponge
-	
 % Preconditions for rinsing item X
 poss(rinse(X), S) :-
-    item(X), % X is a valid item (scrubber or dish)
-    holding(X, S), % Robot is holding X
-    faucetOn(S). % Faucet is on
+    item(X),
+    holding(X, S),
+    faucetOn(S),
+    dirty(X, S),
+    soapy(X, S).
 
+poss(rinse(X), S) :-
+    scrubber(X),
+    holding(X, S), 
+    faucetOn(S),
+    soapy(X, S).
 
 %%%%% SECTION: successor_state_axioms_dishwashing
 %%%%% Write successor-state axioms that characterize how the truth value of all 
@@ -147,8 +163,68 @@ poss(rinse(X), S) :-
 %%%%%
 %%%%% Write your successor state rules here: you have to write brief comments %
 
+% Successor state axiom for holding/2
+holding(X, [pickUp(X, _)|_]).
+holding(X, [A|S]) :- 
+    holding(X, S), 
+    not A = putDown(X, _).% Remains true unless put down
 
+% numHolding successor state axiom
+numHolding(N, [pickUp(_, _)|S]) :-
+    numHolding(M, S),
+    N is M + 1.
 
+numHolding(N, [putDown(_, _)|S]) :-
+    numHolding(M, S),
+    N is M - 1.
+
+numHolding(N, [A|S]) :-
+    numHolding(N, S),
+    not A = pickUp(_, _),
+    not A = putDown(_, _).
+
+% faucetOn(S) - true if faucet is on in situation S
+faucetOn([A|S]) :- 
+    A = turnOnFaucet. % Becomes true if turning on the faucet
+faucetOn([A|S]) :- 
+    (faucetOn(S), not A = turnOffFaucet). % Remains true unless turned off
+
+% loc(X,P,S) - true if item X is at place P in situation S
+loc(X, P, [putDown(X, P)|_]).
+loc(X, P, [A|S]) :-
+    not A = pickUp(X, P),
+    loc(X, P, S).
+% wet(X, S) - true if item X is wet in situation S
+wet(X, [A|S]) :- 
+    A = rinse(X).
+wet(X, [A|S]) :- 
+    wet(X, S).
+
+% dirty(X, S) - true if dish X is dirty in situation S
+dirty(X, [A|S]) :- 
+    dish(X),
+    dirty(X, S),
+    not (A = rinse(X), soapy(X, S)).
+
+% soapy(X, S) - true if item X is soapy in situation S
+% 1. Scrubber becomes soapy when soap is added
+soapy(X, [addSoap(X)|_]) :- 
+    scrubber(X).
+
+% 2. Dish becomes soapy when scrubbed with soapy scrubber
+soapy(X, [scrub(X,Y)|S]) :- 
+    dish(X),
+    soapy(Y, S).
+
+% 3. Item stays soapy unless rinsed
+soapy(X, [A|S]) :- 
+    soapy(X, S),
+    not A = rinse(X).
+
+% 4. Scrubber stays soapy after scrubbing
+soapy(Y, [scrub(_,Y)|S]) :- 
+    scrubber(Y),
+    soapy(Y, S).
 
 %%%%% SECTION: declarative_heuristics_dishwashing
 %%%%% The predicate useless(A,ListOfPastActions) is true if an action A is useless
@@ -165,5 +241,13 @@ poss(rinse(X), S) :-
 %%%%%	
 %%%%% write your rules implementing the predicate  useless(Action, History) here. %
 
+% Prevent immediate reversals
+useless(turnOnFaucet, [turnOffFaucet|_]).      % Dont turn on right after turning off
+useless(turnOffFaucet, [turnOnFaucet|_]).      % Dont turn off right after turning on
+useless(pickUp(X,P), [putDown(X,P)|_]).        % Dont pick up what was just put down
+useless(putDown(X,P), [pickUp(X,P)|_]).        % Dont put down what was just picked up
 
-
+% Only prevent putting dirty dishes in rack
+useless(putDown(X, dish_rack), H) :- 
+    dish(X),
+    dirty(X, H).

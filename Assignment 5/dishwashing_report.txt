@@ -1,0 +1,58 @@
+
+% Enter the names of your group members below.
+% If you only have 2 group members, leave the last space blank
+%
+%%%%%
+%%%%% NAME: Duke Nguyen
+%%%%% NAME: Zehra Cengiz
+%%%%% NAME: Simon Aleksandrov
+%
+
+%%%%% SECTION: cpu_details
+%%%%% Describe the system you ran your tests on below.
+%%%%% It should include information about the processor (mainly speed), 
+%%%%% amount of RAM, and operator system you ran your tests on.
+
+Tests were run on a system with an 11th Gen Intel Core i7-1185G7 processor running at 3.00GHz with 4 cores and 8 logical processors. 
+The system has 64.0 GB of RAM and runs Microsoft Windows 10 Pro.
+
+
+%%%%% SECTION: summary
+%%%%% Summarize your results in 5-10 sentences. Describe which states you tested on, 
+%%%%% which ones ran in a reasonable amount of time (and how long they took), and 
+%%%%% how much speedup you saw when using declarative heuristics. Report any other 
+%%%%% interesting behaviour you saw.
+
+Testing was conducted on goals 11 through 15 from initial state 1, and goal 21 from initial state 2. 
+The simpler goals (11-13) executed very quickly, with goal 11 completing in under 0.01 seconds and goal 12 in 0.02 seconds. 
+Goal 13, despite having a longer solution length of 6 steps, still completed in a reasonable 0.64 seconds. 
+Goal 14 showed a significant increase in computation time, taking 7.25 seconds to find an 8-step solution. 
+Goal 15, which required 10 steps, was tested using heuristic mode and completed in 30.94 seconds, demonstrating the increased complexity of longer solution paths. 
+Goal 21 from the second initial state was solved relatively quickly in 0.45 seconds despite requiring 6 steps, suggesting that the complexity isn't solely determined by the number of steps but also by the branching factor of the search space.
+
+
+%%%%% SECTION: log
+%%%%% Show the actual queries you ran below, along with the output
+%%%%% This should include runtime and the actual plan found
+
+?- solve_problem(regular, 11, 2, Plan).
+Plan = [addSoap(brush), pickUp(brush, counter)]
+Yes (0.00s cpu, solution 1, maybe more)
+?- solve_problem(regular, 12, 4, Plan).
+Plan = [putDown(brush, dish_rack), putDown(sponge, counter), pickUp(brush, counter), pickUp(sponge, dish_rack)]
+Yes (0.02s cpu, solution 1, maybe more)
+?- solve_problem(regular, 13, 6, Plan).
+Plan = [rinse(g1), scrub(g1, brush), pickUp(g1, counter), addSoap(brush), turnOnFaucet, pickUp(brush, counter)]
+Yes (0.64s cpu, solution 1, maybe more)
+?- solve_problem(regular, 14, 8, Plan).
+Plan = [turnOffFaucet, putDown(g1, dish_rack), rinse(g1), scrub(g1, brush), pickUp(g1, counter), addSoap(brush), turnOnFaucet, pickUp(brush, counter)]
+Yes (7.25s cpu, solution 1, maybe more)
+?- solve_problem(heuristic, 15, 10, Plan).
+Plan = [turnOffFaucet, putDown(brush, dish_rack), rinse(brush), putDown(g1, dish_rack), rinse(g1), scrub(g1, brush), pickUp(g1, counter), addSoap(brush), turnOnFaucet, pickUp(brush, counter)]
+Yes (30.94s cpu, solution 1, maybe more)
+?- solve_problem(regular, 21, 6, Plan).
+Plan = [rinse(p1), scrub(p1, sponge), pickUp(p1, counter), addSoap(sponge), turnOnFaucet, pickUp(sponge, dish_rack)]
+Yes (0.45s cpu, solution 1, maybe more)
+?- solve_problem(heuristic, 22, 11, Plan).
+Plan = [putDown(p2, dish_rack), rinse(p2), scrub(p2, sponge), pickUp(p2, counter), putDown(p1, dish_rack), rinse(p1), scrub(p1, sponge), pickUp(p1, counter), addSoap(sponge), turnOnFaucet, pickUp(sponge, dish_rack)]
+Yes (1244.97s cpu, solution 1, maybe more)
